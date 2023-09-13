@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone Number Formatter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #0078d4;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        h1 {
+            font-size: 36px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+        }
+
+        button {
+            background-color: #0078d4;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #005a9e;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+
+        #formattedNumbers {
+            min-height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>SMS Number Formatter</h1>
+    </header>
+    <div class="container">
+        <label for="phoneNumbers">Enter phone numbers:</label>
+        <textarea id="phoneNumbers" rows="10" placeholder="Enter phone numbers here..."></textarea>
+        <button id="generateButton">Generate Numbers</button>
+        <h2>Formatted Numbers:</h2>
+        <textarea id="formattedNumbers" rows="10" readonly></textarea>
+    </div>
+
+    <script>
+        document.getElementById('generateButton').addEventListener('click', function () {
+            const inputNumbers = document.getElementById('phoneNumbers').value;
+            const formattedNumbers = formatPhoneNumbers(inputNumbers);
+            displayFormattedNumbers(formattedNumbers);
+        });
+
+        function formatPhoneNumbers(inputNumbers) {
+            // Split input by line breaks and remove empty lines
+            const lines = inputNumbers.split('\n').filter(line => line.trim() !== '');
+
+            // Format each valid phone number
+            const formattedNumbers = lines.map(line => {
+                const trimmedLine = line.trim();
+
+                // Remove non-digit characters (e.g., spaces, hyphens, and other symbols)
+                const sanitizedNumber = trimmedLine.replace(/\D/g, '');
+
+                // Check if it starts with "61" and replace with "601"
+                if (sanitizedNumber.startsWith('61')) {
+                    return '601' + sanitizedNumber.substring(2);
+                }
+                // Check if it starts with "1" and replace with "601"
+                else if (sanitizedNumber.startsWith('1')) {
+                    return '601' + sanitizedNumber.substring(1);
+                }
+                // Check if it starts with "01" and replace with "601"
+                else if (sanitizedNumber.startsWith('01')) {
+                    return '601' + sanitizedNumber.substring(2);
+                }
+                // Check if it starts with "0" and add "6" in front of "0"
+                else if (sanitizedNumber.startsWith('0')) {
+                    return '6' + sanitizedNumber.substring(1);
+                } else {
+                    // For all other cases, add "601" to the beginning
+                    return '601' + sanitizedNumber;
+                }
+            });
+
+            return formattedNumbers.join('\n');
+        }
+
+        function displayFormattedNumbers(formattedNumbers) {
+            const formattedNumbersTextarea = document.getElementById('formattedNumbers');
+            formattedNumbersTextarea.value = formattedNumbers;
+        }
+    </script>
+</body>
+</html>
